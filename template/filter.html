@@ -1,0 +1,23 @@
+{% extends 'base.html' %}  
+{% block content %}
+  <h2>{{ selected_category.type_Name }} Items</h2>
+
+  <div class="row">
+    {% for item_obj in items %}
+      <div class="col-md-4 mb-4">
+        <!-- Set a fixed height for the card -->
+        <img src="/media/{{ item_obj.image }}" class="card-img-top" alt="{{ item_obj.item_name }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ item_obj.item_name }}</h5>
+          <p class="card-text">Price: ${{ item_obj.price }}</p>
+          <!-- Add to Cart form -->
+          <form action="{% url 'add_cart' item_obj.unique_id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Add to Cart</button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+{% endblock %}

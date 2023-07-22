@@ -1,0 +1,107 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Website</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-RHJ9kAdOeeekXj2T0fnwv+Zu2Qmu0HYMJJUQQpnxHhl5VGskRk3q2DkNFj3Kp+84IINhJO3Pdj1LvJruj4nVw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<style>
+    body {
+      background-color: #f8f9fa;
+    }   
+  </style>
+  <style>
+    
+    .rating {
+        display: inline-block;
+    }
+
+    .fa-star {
+        font-size: 16px;
+        color: #FFD700; 
+    }
+
+    .checked {
+        color: #FFD700;
+    }
+</style>
+<body>
+  <nav class="navbar navbar-expand-lg" style="background-color: #333; color: #fff;">
+    <div class="container">
+        <a class="navbar-brand mr-auto" href="{% url 'home' %}" style="font-size: 1.5rem; color: #fff;">shopapp</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="container">
+    <div class="row">
+      
+        <div class="col-md-8 offset-md-2 mb-4">
+          <br>
+            <form action="{% url 'search_items' %}" method="GET">
+              
+                <div class="input-group">
+                    <input type="text" class="form-control" name="q" placeholder="Search for items...">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+        <!-- Search bar -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="#" style="color: #fff;">Logged in as {{ user.username }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cart' %}" style="color: #fff;">Cart</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'order' %}" style="color: #fff;">Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'details' %}" style="color: #fff;">Details</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'logout' %}" style="color: #fff;">Logout</a>
+              </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}" style="color: #fff;">Login</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Search bar -->
+
+
+  <div class="container mt-5">
+    {% block content %}
+    {% endblock %}
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <footer class="bg-light py-4">
+    <!-- Footer content -->
+  </footer>
+</body>
+</html>
+
+
+
+
+
+
+

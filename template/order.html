@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Order History</h2>
+
+  {% if orders %}
+  {% for order in orders %}
+      <h3>Order # {{order.create_date}}</h3>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Paid</th>
+            <th>Rating</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order_item in order.cart_items.all %}
+            <tr>
+              <td>{{ order_item.item.item_name }}</td>
+              <td>${{ order_item.item.price }}</td>
+              <td>{{ order_item.quantity }}</td>
+              <td>Yes</td>
+              <td>
+                <form method="post" action="{% url 'rate_item' order_item.item.unique_id %}">
+                  {% csrf_token %}
+                  <select name="rate">
+                    <option value="" selected disabled>Select rating</option>
+                    <option value="1">1 - Poor</option>
+                    <option value="2">2 - Below Average</option>
+                    <option value="3">3 - Average</option>
+                    <option value="4">4 - Good</option>
+                    <option value="5">5 - Excellent</option>
+                  </select>
+                  <button type="submit" class="btn btn-primary btn-sm">Rate</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p>Total: ${{ cart_total }}</p>
+      <hr>
+    {% endfor %}
+  {% else %}
+    <p>No order history available.</p>
+  {% endif %}
+{% endblock %}

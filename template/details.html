@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+  <h2>User Details</h2>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    
+    <p>email: {{user.email}}</p>
+    <br>
+    
+    {% if user.userprofile.phone_verified %}
+      <span class="text-success">✓ Phone Verified</span>
+    {% else %}
+      <button type="button" class="btn btn-primary" onclick="verifyPhone()">Verify Phone</button>
+    {% endif %}
+    
+    <button type="submit" class="btn btn-primary">Save</button>
+
+  </form>
+
+  <script>
+    
+    function verifyPhone() {
+      // Add your logic here to handle phone verification
+      alert("Phone verification logic goes here!");
+    }
+  </script>
+{% endblock %}
