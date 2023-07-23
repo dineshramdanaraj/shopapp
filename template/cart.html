@@ -3,7 +3,8 @@
 {% block content %}
   <h2>Your Cart</h2>
 
-  {% if cart  %}
+  {% if cart %}
+ 
     <table class="table table-bordered">
       <thead>
         <tr>
@@ -44,11 +45,33 @@
     
     <div class="text-right">
       <p><strong>Total: ${{ cart_total }}</strong></p>
-      <a href="{% url 'payment' cart_total %}" class="btn btn-primary">Proceed to Checkout</a>
     </div>
+    
+<form action="{% url 'cart' %}" method="GET">
+  <label for="coupon_code">Coupon Code:</label>
+  <input type="text" name="coupon_code" id="coupon_code">
+  <button type="submit">Apply Coupon</button>
+</form>
+{% if coupon %}
+  <p>Coupon: {{ coupon.Code }}</p>
+  <p>Discount: {{ coupon.discount }} {{coupon.type}}</p>
+{% endif %}
+<p>Discounted Total: ${{ discounted_total }}</p>
+
+
+<a href="{% url 'payment' cart_total %}" class="btn btn-primary">Proceed to Checkout</a>
+
   {% else %}
     <p>Your cart is empty.</p>
   {% endif %}
 {% endblock %}
 
   
+<script>
+  // Client-side JavaScript to update the displayed total upon applying the coupon
+  document.querySelector('form').addEventListener('submit', function (event) {
+    event.preventDefault();
+    const couponCode = document.getElementById('coupon_code').value;
+    window.location.href = "{% url 'cart' %}" + "?coupon_code=" + encodeURIComponent(couponCode);
+  });
+</script>

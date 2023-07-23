@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import EmailValidator, MaxValueValidator, MaxLengthValidator
 from django.db.models import Sum  
-
+from django.utils import timezone
 
 # Create your models here.
 class Base(models.Model):
@@ -61,7 +61,19 @@ class rating(Base):
 class order(Base):
     cart = models.ForeignKey(cart, on_delete= models.CASCADE)
     user = models.ForeignKey(User, null = True, on_delete= models.SET_NULL)
-    
+
+class reviews(Base):
+    item_to_review = models.ForeignKey(item, on_delete= models.CASCADE)
+    user = models.ForeignKey(User, null = True, on_delete= models.SET_NULL)
+    comment = models.TextField(null = True)
+
+class coupon(Base):
+    Code = models.CharField(max_length= 10, unique=True)
+    discount = models.IntegerField()
+    type = models.CharField(max_length=20)
+    valid_until = models.DateTimeField()
+
+
 
 
 

@@ -7,4 +7,8 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ['address', 'ph_no']
     
+
+class AddReviewForm(forms.Form):
+    comment = forms.CharField(widget=forms.Textarea)
+    
    

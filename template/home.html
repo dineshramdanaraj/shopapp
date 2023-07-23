@@ -44,12 +44,13 @@
 </form>
 
 
-  <div class="row">
-    {% for item in items %}
-    <div class="col-md-4 mb-4">
+<div class="row">
+  {% for item in items %}
+  <div class="col-md-4 mb-4">
 
-       <!-- Set a fixed height for the card -->
-       <div class="card h-100">
+     <!-- Set a fixed height for the card -->
+     <div class="card h-100">
+      <a href="{% url 'item_prev' item.unique_id %}">
         <img src="/media/{{ item.image }}" class="card-img-top" alt="{{ item.name }}">
         <div class="card-body">
           <h5 class="card-title">{{ item.item_name }}</h5>
@@ -58,22 +59,21 @@
           <div class="rating">
             {% if item.ratings %}
               <p> Rating: <b>{{item.ratings.rate}}</b> ({{item.ratings.count}})</p>
-        
             {% else %}
-                <!-- If no rating available, show a message -->
-                No rating yet.
+              <!-- If no rating available, show a message -->
+              No rating yet.
             {% endif %}
-        </div>
-        
+          </div>
+          
           <form action="{% url 'add_cart' item.unique_id %}" method="post">
             {% csrf_token %}
-            
             <button type="submit" class="btn btn-primary">Add to Cart</button>
           </form>
-      </div>
+        </div>
+      </a>
     </div>
-    </div>
-    {% endfor %}
   </div>
+  {% endfor %}
+</div>
 
 {% endblock %}

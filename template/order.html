@@ -13,6 +13,7 @@
             <th>Quantity</th>
             <th>Paid</th>
             <th>Rating</th>
+            <th>Review</th>
           </tr>
         </thead>
         <tbody>
@@ -34,6 +35,13 @@
                     <option value="5">5 - Excellent</option>
                   </select>
                   <button type="submit" class="btn btn-primary btn-sm">Rate</button>
+                </form>
+              </td>
+              <td>  <!-- New column for the comment field -->
+                <form method="post" action="{% url 'add_review_item' order_item.item.unique_id %}">
+                  {% csrf_token %}
+                  <textarea name="comment" cols="30" rows="3"></textarea>
+                  <button type="submit" class="btn btn-primary btn-sm">Add Review</button>
                 </form>
               </td>
             </tr>

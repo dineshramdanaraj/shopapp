@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import django_heroku
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +28,7 @@ SECRET_KEY = 'django-insecure-ts7v(q4^oja6)1*lzaa5cl)2$pnxdt!$%)^^n2m8^iudjberf=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -43,6 +45,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -142,3 +145,5 @@ AUTH_USER_MODEL = 'auth.User'
 API_KEY = 'test_52afa2112b53b5db5f578c69afd'
 AUTH_TOKEN = 'test_a2af87b3660140c51aaca0a7d63'
 SALT = '808848db6e89493fb24ef0dd4dc3c62d'
+
+django_heroku.settings(locals())

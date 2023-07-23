@@ -1,15 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 import re
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from .forms import UserProfileForm
+from .forms import *
 from django.contrib.auth.models import User
 
-
-
+from django.utils import timezone
     
 from instamojo_wrapper import Instamojo
 from django.conf import settings
@@ -105,17 +104,33 @@ def add_cart(request, item_uid):
 def car(request):
     cart_obj,_ = cart.objects.get_or_create(is_paid=False, user=request.user)
     cart_items = cart_item.objects.filter(cart=cart_obj)
-    
+    try:
+        coupon_obj = coupon.objects.filter(Code=request.GET.get('coupon_code'), valid_until__gte=timezone.now()).first()
+    except coupon.DoesNotExist:
+        coupon_obj = None
+
     cart_total = 0
     for cart_ite in cart_items:
         cart_total += cart_ite.item.price * cart_ite.quantity
-    
-
+    if coupon_obj:
+        discount_amount = 0
+        if coupon_obj.type == 'percentage':
+            if cart_ite > 0:
+                discount_amount = cart_total* ((100 - coupon_obj.discount)//100)
+        else:
+            if cart_ite > coupon_obj.discount:
+                discount_amount = cart_total - coupon_obj.discount
+    else:
+        discount_amount = cart_total
+                
     context = {
         'cart': cart_obj,
         'cart_total': cart_total,
+        'discount' : discount_amount,
+        'coupon' : coupon_obj
     }
     return render(request, 'cart.html', context)
+
 @login_required
 def remove_cart_item(request, cart_item_uid):
     cart_ite = cart_item.objects.get(unique_id= cart_item_uid)
@@ -230,7 +245,7 @@ def decrement_quantity(request, cart_item_uid):
 @login_required
 def payment(request, cart_total):
     userprofil = UserProfile.objects.get(user = request.user)
-    cart_obj = cart.objects.get(user = request.user)
+    cart_obj = cart.objects.get(user = request.user, is_paid = False)
    
     cart_obj.save()
     print(userprofil.email, userprofil.ph_no)
@@ -250,11 +265,60 @@ def payment(request, cart_total):
 @login_required
 def sucess(request):
     pay_req_id = request.GET.get('payment_request__id')
-    cart_obj = cart.objects.get(instamojo_id = pay_req_id)
-    cart_obj.is_paid = True
-    cart_obj.save()
+    matching_carts = cart.objects.filter(instamojo_id=pay_req_id)
+
+    if matching_carts.exists():
+        # Assuming you want to update all matching carts to is_paid=True
+        matching_carts.update(is_paid=True)
+
     return render(request, 'home.html')
+    
 
 def logout_view(request):
     logout(request)
     return redirect('login') 
+
+def item_prev(request, item_uid):
+
+    item_obj = item.objects.get(unique_id=item_uid)
+    review_obj = reviews.objects.filter(item_to_review=item_obj)
+    items = item.objects.all()
+
+        # Filter similar items by type
+    similar_items = items.filter(type=item_obj.type).exclude(unique_id=item_uid)
+
+    context = {
+            "item": item_obj,
+            "reviews": review_obj,
+            "sim_items": similar_items,
+        }
+
+    return render(request, 'item.html', context)
+
+
+
+
+def add_review_item(request, item_uid):
+    item_obj = get_object_or_404(item, unique_id=item_uid)
+
+    if request.method == "POST":
+        form = AddReviewForm(request.POST)
+        if form.is_valid():
+        
+            new_review = reviews(
+                item_to_review=item_obj,
+                user=request.user,  
+                comment=form.cleaned_data['comment']
+            )
+            new_review.save()
+            return redirect('item_prev', item_uid=item_uid)
+    else:
+        form = AddReviewForm()
+
+    context = {
+        "item": item_obj,
+        "form": form,
+    }
+
+    return redirect(request, 'order.html')
+

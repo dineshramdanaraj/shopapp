@@ -19,6 +19,8 @@ from shopping import views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf.urls import url
+from django.views.static import serve
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,14 +33,20 @@ urlpatterns = [
     path('remove_cart_item/<str:cart_item_uid>/', views.remove_cart_item, name='remove_cart_item'),
     path('search_items/', views.search_items, name='search_items'),
     path('category/<category_id>/', views.category_items, name='category_items'),
-     path('details/', views.details, name='details'),
+    path('details/', views.details, name='details'),
     path('increment_quantity/<str:cart_item_uid>/', views.increment_quantity, name='increment_quantity'),
     path('decrement_quantity/<str:cart_item_uid>/', views.decrement_quantity, name='decrement_quantity'),
     path("order/", views.orde, name = "order"),
     path("rate_item/<item_uid>", views.rate_item, name = "rate_item"),
     path("payment/<cart_total>", views.payment, name = "payment"),
     path("sucess/", views.sucess, name = "sucess"),
-    path('logout/', views.logout_view, name='logout'),
+    path('logout/', views.logout_view, name='logout'),\
+    path('item_prev/<item_uid>', views.item_prev, name = 'item_prev'),
+    path("add_review_item/<item_uid>", views.add_review_item, name = "add_review_item"),
+    url(r'^media/(?P<path>.*)$', serve,{'document_root':       settings.MEDIA_ROOT}), 
+    url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}), 
+
+
 
 
 
