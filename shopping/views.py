@@ -7,8 +7,9 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from .forms import *
 from django.contrib.auth.models import User
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
+from django.db.models import Sum, Count  
     
 from instamojo_wrapper import Instamojo
 from django.conf import settings
@@ -19,20 +20,31 @@ api = Instamojo(api_key=settings.API_KEY, auth_token=settings.AUTH_TOKEN, endpoi
 # Create your views here.
 def home(request):
     category_filter = request.GET.get('category')
-    items = item.objects.all()
+    items_list = item.objects.order_by('item_name')
     categories = item_category.objects.all()
-    #print(items.first().ratings.rate)
     
-    
+    items_per_page = 3
+
     if category_filter:
-        cat = item_category.objects.get(type_Name = category_filter)
-        items = items.filter(type =cat)
-   
+        try:
+            category = item_category.objects.get(type_Name=category_filter)
+            items_list = items_list.filter(type=category)
+        except item_category.DoesNotExist:
+            pass
+
+    paginator = Paginator(items_list, items_per_page)
+    page_number = request.GET.get('page')
+    try:
+        items = paginator.page(page_number)
+    except EmptyPage:
+        items = paginator.page(paginator.num_pages)
+    except PageNotAnInteger:
+    
+        items = paginator.get_page(1)
 
     context = {
         'items': items,
         'categories': categories,
-        
     }
 
     return render(request, 'home.html', context)
@@ -99,7 +111,7 @@ def add_cart(request, item_uid):
     cart_items.quantity +=1
     cart_items.save()
     
-    return redirect("/home/")
+    return item_prev(request, item_uid= item_obj.unique_id)
 @login_required
 def car(request):
     cart_obj,_ = cart.objects.get_or_create(is_paid=False, user=request.user)
@@ -112,14 +124,20 @@ def car(request):
     cart_total = 0
     for cart_ite in cart_items:
         cart_total += cart_ite.item.price * cart_ite.quantity
+        print(cart_total)
     if coupon_obj:
         discount_amount = 0
-        if coupon_obj.type == 'percentage':
-            if cart_ite > 0:
-                discount_amount = cart_total* ((100 - coupon_obj.discount)//100)
-        else:
-            if cart_ite > coupon_obj.discount:
+        if coupon_obj.type == "%":
+            if cart_total > 0:
+                discount_amount = cart_total* ((100 - coupon_obj.discount)/100)
+        elif coupon_obj.type == "Rs":
+            if cart_total > int(coupon_obj.discount):
                 discount_amount = cart_total - coupon_obj.discount
+            else:
+                discount_amount = 0
+        else:
+            discount_amount = cart_total
+            
     else:
         discount_amount = cart_total
                 
@@ -139,19 +157,10 @@ def remove_cart_item(request, cart_item_uid):
 @login_required
 def orde(request):
     
-
     cart_obj= cart.objects.filter(is_paid = True, user = request.user)
-    
-    cart_items = cart_item.objects.filter(cart=cart_obj.first())
-    
-    cart_total = 0
-    for cart_ite in cart_items:
-        cart_total += cart_ite.item.price * cart_ite.quantity
-    
-
     context = {
         'orders': cart_obj,
-        'cart_total': cart_total,
+       
     }
     return render(request, 'order.html', context)
 @login_required
@@ -161,16 +170,26 @@ def rate_item(request, item_uid):
         if rate < 1 or rate > 5:
             return redirect('home') 
 
-        item_obj = item.objects.get(unique_id=item_uid)
-        rating_obj, created = rating.objects.get_or_create(item_to_rate=item_obj)
+        item_obj = get_object_or_404(item, unique_id=item_uid)
+        rating_obj, created = rating.objects.get_or_create(item_to_rate=item_obj, user=request.user)
 
-        rating_obj.count += 1
         if created:
+           
             rating_obj.rate = rate
-        else:    
-            rating_obj.rate = (rating_obj.rate * (rating_obj.count - 1) + rate) / rating_obj.count
+            rating_obj.count +=1
+            rating_obj.save()
+        else:
+            
+            rating_obj.rate = rate
+            rating_obj.save()
 
-        rating_obj.save()
+     
+        item_ratings = rating.objects.filter(item_to_rate=item_obj)
+        total_ratings = item_ratings.aggregate(total=Sum('rate'), count=Count('rate'))
+        average_rating = total_ratings['total'] / total_ratings['count']
+        item_obj.ratings.rate = average_rating
+        item_obj.ratings.count = total_ratings['count']
+        item_obj.ratings.save()
 
         return redirect('order') 
 

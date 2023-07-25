@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Website</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-RHJ9kAdOeeekXj2T0fnwv+Zu2Qmu0HYMJJUQQpnxHhl5VGskRk3q2DkNFj3Kp+84IINhJO3Pdj1LvJruj4nVw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
@@ -41,15 +42,12 @@
       
         <div class="col-md-8 offset-md-2 mb-4">
           <br>
-            <form action="{% url 'search_items' %}" method="GET">
-              
-                <div class="input-group">
-                    <input type="text" class="form-control" name="q" placeholder="Search for items...">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-primary">Search</button>
-                    </div>
-                </div>
-            </form>
+          <form action="{% url 'search_items' %}" method="get" class="d-flex">
+            <input type="text" name="q" class="form-control me-2" placeholder="Search" aria-label="Search">
+            <button type="submit" class="btn btn-primary" style="position: relative;">
+              <i class="fas fa-search" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></i>
+            </button>
+          </form>
         </div>
     </div>
 </div>
@@ -93,12 +91,129 @@
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ 
+ 
   <footer class="bg-light py-4">
     <!-- Footer content -->
-  </footer>
+    <footer class="footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-4">
+              <h4>About Us</h4>
+              <p> Shopapp is a e-commerce website used for selling posters at affordable price.</p>
+            </div>
+            <div class="col-md-4">
+              <h4>Contact Us</h4>
+              <p>Email: abc@shopapp.com</p>
+              <p>Phone: +91 987654321</p>
+              <p>Address: 123 Main Street, XYZ, India</p>
+            </div>
+            <div class="col-md-4">
+              <h4>Follow Us</h4>
+              <ul class="list-inline">
+                <li class="list-inline-item"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                <li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
+                <li class="list-inline-item"><a href="#"><i class="fab fa-instagram"></i></a></li>
+                <li class="list-inline-item"><a href="#"><i class="fab fa-pinterest"></i></a></li>
+              </ul>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-md-6">
+              <ul class="list-inline">
+                <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+                <li class="list-inline-item"><a href="#">Terms of Service</a></li>
+                <li class="list-inline-item"><a href="#">Return Policy</a></li>
+                <li class="list-inline-item"><a href="#">FAQ</a></li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <p class="text-right">© 2023 Your E-Commerce Website. All rights reserved.</p>
+            </div>
+          </div>
+        </div>
+      </footer>
 </body>
 </html>
-
+<style>
+    /* Footer Styling */
+    .footer {
+      background-color: #333;
+      color: #fff;
+      padding: 40px 0;
+    }
+  
+    .footer h4 {
+      color: #fff;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+  
+    .footer p {
+      font-size: 14px;
+      line-height: 1.6;
+    }
+  
+    .footer ul.list-inline {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+  
+    .footer ul.list-inline li {
+      display: inline-block;
+      margin-right: 10px;
+    }
+  
+    .footer ul.list-inline li a {
+      color: #fff;
+      font-size: 18px;
+      transition: color 0.3s ease;
+    }
+  
+    .footer ul.list-inline li a:hover {
+      color: #f39c12; /* Change the color on hover */
+    }
+  
+    .footer hr {
+      border-color: #555;
+      margin: 20px 0;
+    }
+  
+    .footer ul.list-inline li a i {
+      font-size: 24px;
+    }
+  
+    .footer p.text-right {
+      font-size: 12px;
+      margin-bottom: 0;
+    }
+  
+    /* Media Queries for Responsive Footer */
+    @media (max-width: 767px) {
+      .footer h4 {
+        margin-top: 20px;
+      }
+  
+      .footer ul.list-inline {
+        text-align: center;
+      }
+  
+      .footer ul.list-inline li {
+        margin: 0 10px;
+      }
+  
+      .footer ul.list-inline li:last-child {
+        margin-right: 0;
+      }
+  
+      .footer p.text-right {
+        text-align: center;
+        margin-top: 10px;
+      }
+    }
+  </style>
 
 
 

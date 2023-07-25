@@ -1,6 +1,68 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<style>
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+  }
+
+  th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  td {
+    font-size: 14px;
+  }
+
+  .btn {
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+
+  .form-control {
+    max-width: 60px;
+  }
+
+  .text-right {
+    text-align: right;
+    margin-bottom: 20px;
+  }
+
+  .coupon-form {
+    margin-bottom: 20px;
+  }
+
+  .coupon-form label {
+    margin-right: 10px;
+  }
+
+  .coupon-form button {
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+
+  .discounted-total {
+    margin-top: 20px;
+    font-weight: bold;
+  }
+
+  .checkout-button {
+    margin-top: 20px;
+  }
+</style>
   <h2>Your Cart</h2>
 
   {% if cart %}
@@ -20,12 +82,12 @@
         {% for cart_item in cart.cart_items.all %}
           <tr>
             <td>{{ cart_item.item.item_name }}</td>
-            <td>${{ cart_item.item.price }}</td>
+            <td>Rs{{ cart_item.item.price }}</td>
             <td>
               <form method="post" action="{% url 'increment_quantity' cart_item.unique_id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-default btn-sm">+</button>
-                <input type="number" min="1" value="{{ cart_item.quantity }}" class="form-control quantity-input" id="quantity_{{ cart_item.uid }}" style="max-width: 60px;">
+                <p> {{cart_item.quantity}} </p>
               </form>
               <form method="post" action="{% url 'decrement_quantity' cart_item.unique_id %}">
                 {% csrf_token %}
@@ -44,7 +106,7 @@
     </table>
     
     <div class="text-right">
-      <p><strong>Total: ${{ cart_total }}</strong></p>
+      <p><strong>Total: Rs{{ cart_total }}</strong></p>
     </div>
     
 <form action="{% url 'cart' %}" method="GET">
@@ -56,11 +118,15 @@
   <p>Coupon: {{ coupon.Code }}</p>
   <p>Discount: {{ coupon.discount }} {{coupon.type}}</p>
 {% endif %}
-<p>Discounted Total: ${{ discounted_total }}</p>
+<p>Discounted Total: Rs{{ discount }}</p>
 
+{% if discount %}
+<a href="{% url 'payment' discount %}" class="btn btn-primary">Proceed to Checkout</a>
+
+{%else%}
 
 <a href="{% url 'payment' cart_total %}" class="btn btn-primary">Proceed to Checkout</a>
-
+{%endif%}
   {% else %}
     <p>Your cart is empty.</p>
   {% endif %}

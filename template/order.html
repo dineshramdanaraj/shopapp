@@ -1,5 +1,45 @@
 {% extends 'base.html' %}
 {% block content %}
+<style>
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+  }
+
+  th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  td {
+    font-size: 14px;
+  }
+
+  select {
+    padding: 5px;
+  }
+
+  .btn {
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+
+  textarea {
+    resize: vertical;
+    width: 100%;
+    padding: 5px;
+  }
+</style>
   <h2>Order History</h2>
 
   {% if orders %}
@@ -20,7 +60,7 @@
           {% for order_item in order.cart_items.all %}
             <tr>
               <td>{{ order_item.item.item_name }}</td>
-              <td>${{ order_item.item.price }}</td>
+              <td>Rs{{ order_item.item.price }}</td>
               <td>{{ order_item.quantity }}</td>
               <td>Yes</td>
               <td>
@@ -48,7 +88,7 @@
           {% endfor %}
         </tbody>
       </table>
-      <p>Total: ${{ cart_total }}</p>
+   
       <hr>
     {% endfor %}
   {% else %}

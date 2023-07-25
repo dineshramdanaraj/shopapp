@@ -3,7 +3,68 @@
 
 
 {% block content %}
-  <h2>User Details</h2>
+<style>
+  /* Add some padding to the header */
+  h2 {
+    padding: 20px 0;
+  }
+
+  /* Style the form fields */
+  form {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  /* Style the form labels and inputs */
+  form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
+  form input[type="text"],
+  form input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  /* Style the success message for phone verification */
+  .text-success {
+    color: #28a745;
+    font-weight: bold;
+    margin-left: 10px;
+  }
+
+  /* Style the "Verify Phone" button */
+  .btn-primary {
+    padding: 10px 15px;
+    border-radius: 4px;
+  }
+
+  /* Add some space between the buttons */
+  button {
+    margin-right: 10px;
+  }
+
+  /* Center the buttons */
+  .text-center {
+    text-align: center;
+  }
+
+  /* Style the user emoji/logo */
+  .user-emoji {
+    font-size: 48px;
+    margin-right: 10px;
+  }
+</style>
+
+<h2>
+  <span class="user-emoji">👤</span> User Details
+</h2>
+  
   <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}

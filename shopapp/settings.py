@@ -26,9 +26,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ts7v(q4^oja6)1*lzaa5cl)2$pnxdt!$%)^^n2m8^iudjberf='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['.verscel.app', 'now.sh']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -45,7 +45,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -148,4 +147,3 @@ API_KEY = 'test_52afa2112b53b5db5f578c69afd'
 AUTH_TOKEN = 'test_a2af87b3660140c51aaca0a7d63'
 SALT = '808848db6e89493fb24ef0dd4dc3c62d'
 
-django_heroku.settings(locals())

@@ -1,6 +1,54 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+  /* Set a fixed height for the carousel */
+  #myCarousel {
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Style the carousel indicators */
+  .carousel-indicators li {
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 0 5px;
+  }
+
+  .carousel-indicators .active {
+    background-color: #007bff;
+  }
+
+  /* Style the carousel images */
+  .carousel-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Style the carousel control icons */
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    width: 30px;
+    height: 30px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    background-color: #fff;
+  }
+
+  /* Hide the default focus outline */
+  .carousel-control-prev,
+  .carousel-control-next {
+    outline: none;
+  }
+  </style>
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
     <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -31,27 +79,103 @@
   <h2>Home</h2>
  
 
-<form action="{% url 'home' %}" method="get">
-  <div class="input-group mb-3">
-    <select class="form-select" name="category">
-      <option value="">All Categories</option>
-      {% for category in categories %}
-        <option value="{{ category }}">{{ category.type_Name}}</option>
-      {% endfor %}
-    </select>
-    <button type="submit" class="btn btn-primary">Filter</button>
-  </div>
-</form>
+  <form action="{% url 'home' %}" method="get" class="d-flex">
+    <div class="input-group mb-3">
+      <select class="form-select" name="category">
+        <option value="">All Categories</option>
+        {% for category in categories %}
+          <option value="{{ category }}">{{ category.type_Name }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn btn-primary" style="position: relative;">
+        <i class="fas fa-filter" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></i>
+        
+      </button>
+    </div>
+  </form>
 
+<style>
+  /* Add some padding to the header */
+  h2 {
+    padding: 20px 0;
+  }
 
+  /* Style the filter form and button */
+  .input-group {
+    margin-bottom: 20px;
+  }
+
+  .form-select {
+    width: 70%;
+    padding: 10px;
+    border-radius: 4px 0 0 4px;
+  }
+
+  .btn-primary {
+    padding: 10px 15px;
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* Style the cards */
+  .card {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+  }
+
+  .card-img-top {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  .card-text {
+    margin-bottom: 5px;
+  }
+
+  .rating {
+    color: #ffa500;
+    font-size: 14px;
+  }
+
+  .rating b {
+    font-weight: bold;
+  }
+
+  /* Add some space between the cards */
+  .mb-4 {
+    margin-bottom: 20px;
+  }
+
+  /* Make the cards the same height */
+  .h-100 {
+    height: 400px;
+  }
+
+  /* Add some space between the cards in the row */
+  .row {
+    margin: 0 -10px;
+  }
+
+  .col-md-4 {
+    padding: 0 10px;
+  }
+</style>
 <div class="row">
   {% for item in items %}
   <div class="col-md-4 mb-4">
 
-     <!-- Set a fixed height for the card -->
+    
      <div class="card h-100">
       <a href="{% url 'item_prev' item.unique_id %}">
-        <img src="/media/{{ item.image }}" class="card-img-top" alt="{{ item.name }}">
+        <img src="/media/{{ item.image }}" class="card-img-top" alt="{{ item.name }}"></a>
         <div class="card-body">
           <h5 class="card-title">{{ item.item_name }}</h5>
           <p class="card-text">{{ item.type }}</p>
@@ -60,20 +184,69 @@
             {% if item.ratings %}
               <p> Rating: <b>{{item.ratings.rate}}</b> ({{item.ratings.count}})</p>
             {% else %}
-              <!-- If no rating available, show a message -->
+           
               No rating yet.
             {% endif %}
           </div>
           
-          <form action="{% url 'add_cart' item.unique_id %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary">Add to Cart</button>
-          </form>
+          
         </div>
-      </a>
+      
     </div>
   </div>
   {% endfor %}
 </div>
+
+<style>
+  .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+  }
+
+  .step-links {
+      display: flex;
+      align-items: center;
+  }
+
+  .step-links a {
+      display: inline-block;
+      padding: 5px 10px;
+      margin: 0 2px;
+      text-decoration: none;
+      color: #fff;
+      background-color: #b70a19d5;
+      border: 1px solid #8c1705;
+      border-radius: 4px;
+  }
+
+  .step-links .current {
+      padding: 5px 10px;
+      margin: 0 2px;
+      color: #0c020570;
+      background-color: #fff;
+      border: 1px solid #080002;
+      border-radius: 4px;
+  }
+</style>
+
+<div class="pagination">
+        <span class="step-links">
+            {% if items.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ items.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ items.number }} of {{ items.paginator.num_pages }}.
+            </span>
+
+            {% if items.has_next %}
+                <a href="?page={{ items.next_page_number }}">next</a>
+                <a href="?page={{ items.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
 
 {% endblock %}
