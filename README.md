@@ -64,11 +64,11 @@ Usage
 
 ```bash
 python manage.py runserver
-```
+
 Open your browser and visit http://127.0.0.1:8000/ to access the website.
 
 Log in with the superuser credentials to access the admin panel.
-
+```
 Database
 ShopApp uses SQLite as its database. You can manage the database using Django's admin panel or Django shell.
 
