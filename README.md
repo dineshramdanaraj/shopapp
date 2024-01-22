@@ -13,8 +13,7 @@ Welcome to ShopApp, an online poster store developed using Django! This project 
 - [Rating and Reviews](#rating-and-reviews)
 - [Order History and Returns](#order-history-and-returns)
 - [Hosting](#hosting)
-- [Contributing](#contributing)
-- [License](#license)
+
 
 ## Features
 - Browse a wide variety of posters
