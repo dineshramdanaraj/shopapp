@@ -39,28 +39,32 @@ Welcome to ShopApp, an online poster store developed using Django! This project 
 2. Create a virtual environment (optional but recommended):
 
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-
+   python -m venv venv
+   source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+```
 3. Install dependencies:
 
 ```bash
 
 pip install -r requirements.txt
-Apply database migrations:
+```
+4.Apply database migrations:
 
-bash
+```bash
 
 python manage.py migrate
-Create a superuser (admin):
+```
+5.Create a superuser (admin):
 
-bash
+```bash
 python manage.py createsuperuser
 Usage
-Run the development server:
+```
+6.Run the development server:
 
-bash
+```bash
 python manage.py runserver
+```
 Open your browser and visit http://127.0.0.1:8000/ to access the website.
 
 Log in with the superuser credentials to access the admin panel.
@@ -70,10 +74,11 @@ ShopApp uses SQLite as its database. You can manage the database using Django's 
 
 To make changes to the models, run:
 
-bash
-Copy code
+```bash
+
 python manage.py makemigrations
 python manage.py migrate
+```
 Payment Gateway
 ShopApp integrates with Instamojo for secure online payments. Make sure to configure your Instamojo API credentials in the settings.
 
