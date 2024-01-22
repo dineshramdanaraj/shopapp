@@ -35,32 +35,31 @@ Welcome to ShopApp, an online poster store developed using Django! This project 
    ```bash
    git clone https://github.com/your-username/shopapp.git
    cd shopapp
-Create a virtual environment (optional but recommended):
+   
+2. Create a virtual environment (optional but recommended):
 
-bash
-Copy code
+```bash
 python -m venv venv
 source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-Install dependencies:
 
-bash
-Copy code
+3. Install dependencies:
+
+```bash
+
 pip install -r requirements.txt
 Apply database migrations:
 
 bash
-Copy code
+
 python manage.py migrate
 Create a superuser (admin):
 
 bash
-Copy code
 python manage.py createsuperuser
 Usage
 Run the development server:
 
 bash
-Copy code
 python manage.py runserver
 Open your browser and visit http://127.0.0.1:8000/ to access the website.
 
