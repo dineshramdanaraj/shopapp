@@ -1,5 +1,5 @@
 
-# ShopApp - Online Poster Store
+# ShopApp - Online Poster Store...
 
 Welcome to ShopApp, an online poster store developed using Django! This project allows users to browse and purchase posters seamlessly, with integrated payment functionality via Instamojo. The website is powered by Django, utilizes SQLite for database storage, and is hosted on PythonAnywhere.
 
